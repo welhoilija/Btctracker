@@ -47,7 +47,7 @@ class Background(pygame.sprite.Sprite):
         self.rect.left, self.rect.top = location
 
 
-def values(value, x, y, font, color):
+def drawtext(value, x, y, font, color):
 	text = font.render(value, True, color, None) 
 	textRect = text.get_rect()
 	textRect.center = (x, y)
@@ -66,6 +66,7 @@ while 1:
 
 
 	mouse = pygame.mouse.get_pos()
+
 	#print(mouse)
 	
 
@@ -85,9 +86,13 @@ while 1:
 			color = green
 		else:
 			color = red
+
+
+
+		#Checks if the price is still same, if it is , dont draw anything
 		if oldvalue == value:
 			print(value)
-		#if value has changed, fill the screen with blue and redraw
+
 
 
 			
@@ -95,15 +100,17 @@ while 1:
 			screen.fill([0, 0, 0])
 			screen.blit(BackGround.image, BackGround.rect)
 
-			values(str(Priceslist[0]), 640 * 0.65, 480 * 0.90, font, color)
+			drawtext(str(Priceslist[0]), 640 * 0.65, 480 * 0.90, font, color)
 
-			values(currency + "/BTC", 640 * 0.15, 480 * 0.90, font2, green)
+			drawtext(currency + "/BTC", 640 * 0.15, 480 * 0.90, font2, green)
 
-			values(str(Priceslist[1]), 640 * 0.65, 480 * 0.68, font1, color1)
+			drawtext(str(Priceslist[1]), 640 * 0.65, 480 * 0.68, font1, color1)
 
-			values(str(Priceslist[2]), 640 * 0.65, 480 * 0.54, font1, color2)
+			drawtext(str(Priceslist[2]), 640 * 0.65, 480 * 0.54, font1, color2)
 
-			values(str(Priceslist[3]), 640 * 0.65, 480 * 0.40, font1, color3)
+			drawtext(str(Priceslist[3]), 640 * 0.65, 480 * 0.40, font1, color3)
+
+			drawtext("USD", 18, 152, font2, red)
 
 
 
@@ -119,7 +126,7 @@ while 1:
 
 
 
-	if 168 > mouse[0] > 19 and 98 > mouse[1] > 69:
+	if 168 > mouse[0] > 19 and 98 > mouse[1] > 69 and pygame.mouse.get_pressed() == (1, 0, 0):
 		pygame.draw.rect(screen, bright_green, (18, 68, 152, 29))
 		currency = "USD"
 	else:
