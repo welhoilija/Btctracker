@@ -16,7 +16,8 @@ green = (0,200,0)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 
-currency = input("which currency would you like? f.e. 'EUR'")
+currency = "EUR"
+oldcurrency = currency
 #last = input("which price would you like? f.e. 'last' or 'buy'")
 
 
@@ -56,7 +57,7 @@ def drawtext(value, x, y, font, color):
 
 BackGround = Background('gray.png', [0,0])
 
-Priceslist = [0,0,0,0,0]
+EURPriceslist = [0,0,0,0,0]
 
 while 1:
 	for event in pygame.event.get():
@@ -67,20 +68,19 @@ while 1:
 
 	mouse = pygame.mouse.get_pos()
 
-	#print(mouse)
+	print(mouse)
 	
 
 
 
 	#checks if a minute has passed, if it has run the numbers again
-	if time.time() - oldtime > 60:
+	if time.time() - oldtime > 60 or currency != oldcurrency:
 		print("its been a minute")
 		prices = requests.get("https://blockchain.info/ticker")
-		jsontext = prices.text
-		parsed_json= json.loads(jsontext)
+		parsed_json= json.loads(prices.text)
 		value = float(parsed_json[currency]["last"])
 		print(value)
-		Priceslist.insert(0, value)
+		EURPriceslist.insert(0, value)
 
 		if value > oldvalue:
 			color = green
@@ -100,17 +100,17 @@ while 1:
 			screen.fill([0, 0, 0])
 			screen.blit(BackGround.image, BackGround.rect)
 
-			drawtext(str(Priceslist[0]), 640 * 0.65, 480 * 0.90, font, color)
+			drawtext(str(EURPriceslist[0]), 640 * 0.65, 480 * 0.90, font, color)
 
 			drawtext(currency + "/BTC", 640 * 0.15, 480 * 0.90, font2, green)
 
-			drawtext(str(Priceslist[1]), 640 * 0.65, 480 * 0.68, font1, color1)
+			drawtext(str(EURPriceslist[1]), 640 * 0.65, 480 * 0.68, font1, color1)
 
-			drawtext(str(Priceslist[2]), 640 * 0.65, 480 * 0.54, font1, color2)
+			drawtext(str(EURPriceslist[2]), 640 * 0.65, 480 * 0.54, font1, color2)
 
-			drawtext(str(Priceslist[3]), 640 * 0.65, 480 * 0.40, font1, color3)
+			drawtext(str(EURPriceslist[3]), 640 * 0.65, 480 * 0.40, font1, color3)
 
-			drawtext("USD", 18, 152, font2, red)
+			
 
 
 
@@ -123,6 +123,7 @@ while 1:
 		color3 = color2
 		color2 = color1
 		color1 = color
+		oldcurrency = currency
 
 
 
@@ -131,7 +132,15 @@ while 1:
 		currency = "USD"
 	else:
 		pygame.draw.rect(screen, green, (18, 68, 152, 29))
+	drawtext("USD", 95, 83, font2, red)
 
+
+	if 168 > mouse[0] > 19 and 130 > mouse[1] > 99 and pygame.mouse.get_pressed() == (1, 0, 0):
+		pygame.draw.rect(screen, bright_green, (18, 100, 152, 29))
+		currency = "EUR"
+	else:
+		pygame.draw.rect(screen, green, (18, 100, 152, 29))
+	drawtext("EUR", 95, 117, font2, red)
 
 
 
